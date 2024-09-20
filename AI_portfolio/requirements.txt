@@ -1,0 +1,176 @@
+import streamlit as st
+import base64
+
+# Function to encode the image to base64
+def get_base64_encoded_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode()
+
+# Path to your local image file
+image_path = "images/3408105.jpg"  # Replace with your image path
+base64_image = get_base64_encoded_image(image_path)
+
+# Function to handle bot responses
+def get_bot_response(user_input):
+    responses = {
+        "what is your name": "I'm John Doe, a data scientist and software engineer.",
+        "name": "I'm John Doe, a data scientist and software engineer.",
+        "what is your education": "I have a degree in Computer Science from XYZ University.",
+        "education": "I have a degree in Computer Science from XYZ University.",
+        "your skills": "I specialize in Python, machine learning, data analysis, and web development.",
+        "skills": "I specialize in Python, machine learning, data analysis, and web development.",
+        "your setup": "I work on a high-performance laptop with 16GB RAM and an Intel i7 processor.",
+        "setup": "I work on a high-performance laptop with 16GB RAM and an Intel i7 processor.",
+        "who are you": "I'm John Doe, a data scientist and software engineer. I have a degree in Computer Science from XYZ University. I specialize in Python, machine learning, data analysis, and web development.",
+        "default": "I'm not sure how to respond to that. Please ask me something about myself or my setup."
+    }
+    return responses.get(user_input.lower(), responses["default"])
+
+def main():
+    # CSS to set the background image and style adjustments
+    st.markdown(
+        f"""
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+        body, .stApp {{
+            font-family: 'Great Vibes', cursive;
+        }}
+        .stApp {{
+            background: url("data:image/jpeg;base64,{base64_image}") no-repeat center center fixed;
+            background-size: cover;
+        }}
+        .sidebar .sidebar-content {{
+            background: rgba(255, 255, 255, 0.8);
+        }}
+        .block-container {{
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 100% !important; /* Increase max width */
+            width: 100% !important; /* Ensure full width */
+            margin: 0 auto; /* Center align the content */
+            color: white;
+        }}
+        button {{
+            font-size: 24px;
+            padding: 1.5rem 3rem;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-family: 'Great Vibes', cursive; /* Apply font to buttons */
+        }}
+        button:hover {{
+            color: #ccc;
+        }}
+        h1 {{
+            font-size: 60px !important;
+            color: white;
+            font-weight: 700;
+        }}
+        h2 {{
+            font-size: 50px !important;
+            color: white;
+            font-weight: 700;
+        }}
+        h3 {{
+            font-size: 40px !important;
+            color: white;
+            font-weight: 700;
+        }}
+        p, li {{
+            font-size: 30px !important;
+            color: white;
+            font-weight: 400;
+        }}
+        input, textarea {{
+            font-size: 30px !important;
+            color: white;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 0.5rem;
+        }}
+        .navbar {{
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            width: 100%; /* Ensure full width */
+            font-family: 'Great Vibes', cursive; /* Apply the Great Vibes font */
+        }}
+        .navbar button {{
+            font-size: 50px;
+            padding: 0.5rem 1rem;
+            color: white;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }}
+        .navbar button:hover {{
+            color: #ccc;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.title("Welcome to my Portfolio")
+
+    # Simplified navigation bar
+    st.markdown(
+        """
+        <div class="navbar">
+            <button onclick="window.location.href = '/';">Home</button>
+            <button onclick="window.location.href = '/About';">About</button>
+            <button onclick="window.location.href = '/Projects';">Projects</button>
+            <button onclick="window.location.href = '/Skills';">Skills</button>
+            <button onclick="window.location.href = '/Contact';">Contact</button>
+            <button onclick="window.location.href = '/AIBot';">AI Bot</button>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Default page
+    if 'page' not in st.session_state:
+        st.session_state.page = 'Home'
+
+    # Page content based on the selected navigation button
+    if st.session_state.page == 'Home':
+        st.header("Welcome to My Portfolio")
+        st.write("My personal portfolio with AI bot")
+        st.write("This is the home page of my portfolio.")
+
+    elif st.session_state.page == 'About':
+        st.header("About Me")
+        st.write("A brief introduction about myself.")
+
+    elif st.session_state.page == 'Projects':
+        st.header("Projects")
+        st.write("Details of the projects I have worked on.")
+
+    elif st.session_state.page == 'Skills':
+        st.header("Skills")
+        st.write("List of skills and technologies I am proficient in.")
+
+    elif st.session_state.page == 'Contact':
+        st.header("Contact")
+        st.write("How to get in touch with me.")
+        
+    elif st.session_state.page == 'AI Bot':
+        st.header("AI Bot")
+        
+        st.write("Ask me anything about myself or my setup.")
+        user_input = st.text_input("You:", "")
+        
+        if st.button("Send"):
+            if user_input:
+                response = get_bot_response(user_input)
+                st.write("Bot:", response)
+
+if __name__ == "__main__":
+    main()
